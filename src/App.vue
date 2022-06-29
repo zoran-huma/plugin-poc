@@ -1,37 +1,37 @@
 <template>
-  <div>
+  <div class="host-wrapper">
     <h1>Host app</h1>
-  </div>
-  <div>
     <div>
-      <h1>List of all plugins</h1>
-      <div v-for="plugin in pluginListFromServer" :key="plugin.key">
-        {{ plugin.name }}
-        <input
-          type="checkbox"
-          :checked="plugin.enabled"
-          :id="plugin.id"
-          class="mr-2 hidden"
-          @input="(event) => setChecked(event)"
-        />
+      <div>
+        <h1>Control plugins from host app</h1>
+        <div v-for="plugin in pluginListFromServer" :key="plugin.key">
+          {{ plugin.name }}
+          <input
+            type="checkbox"
+            :checked="plugin.enabled"
+            :id="plugin.id"
+            class="mr-2 hidden"
+            @input="(event) => setChecked(event)"
+          />
+        </div>
       </div>
-    </div>
 
-    <div>
-      <h1>List of all ENABLED plugins</h1>
-      <div v-for="plugin in pluginListFromServer" :key="plugin.key">
-        {{ plugin.name }} {{ isEnabled(plugin) }}
+      <div>
+        <h1>Plugins from server</h1>
+        <div v-for="plugin in pluginListFromServer" :key="plugin.key">
+          {{ plugin.name }} {{ isEnabled(plugin) }}
+        </div>
       </div>
-    </div>
 
-    <h1>Display Plugins below:</h1>
+      <h1>Display enabled plugins:</h1>
 
-    <div
-      class="plugin-wrapper"
-      v-for="plugin in enabledPluginListFromServer"
-      :key="plugin.id"
-    >
-      <component :is="plugins[pluginToShow(plugin.id)]" />
+      <div
+        class="plugin-wrapper"
+        v-for="plugin in enabledPluginListFromServer"
+        :key="plugin.id"
+      >
+        <component :is="plugins[pluginToShow(plugin.id)]" />
+      </div>
     </div>
   </div>
 </template>
@@ -94,6 +94,11 @@ export default {
 };
 </script>
 <style scoped>
+.host-wrapper {
+  height: 100vh;
+  border: 1px solid green;
+  padding: 2rem;
+}
 .plugin-wrapper {
   margin: 2rem;
 }
