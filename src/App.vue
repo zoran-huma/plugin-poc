@@ -26,12 +26,12 @@
 
     <h1>Display Plugins below:</h1>
 
-    <div class="plugin-wrapper">
-      <component
-        v-for="plugin in enabledPluginListFromServer"
-        :key="plugin.id"
-        :is="plugins[pluginToShow]"
-      />
+    <div
+      class="plugin-wrapper"
+      v-for="plugin in enabledPluginListFromServer"
+      :key="plugin.id"
+    >
+      <component :is="plugins[pluginToShow(plugin.id)]" />
     </div>
   </div>
 </template>
@@ -60,7 +60,13 @@ export default {
         );
       })
     );
-    const pluginToShow = ref(0);
+    const pluginToShow = (id) => {
+      const pluginIndex = pluginListFromServer.value.findIndex(
+        (plugin) => plugin.id === id
+      );
+
+      return pluginIndex;
+    };
     const setChecked = (event) => {
       store.dispatch('togglePlugin', event.target.id);
     };
