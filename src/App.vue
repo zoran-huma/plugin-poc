@@ -93,3 +93,8 @@ export default {
   },
 };
 </script>
+<style scoped>
+.plugin-wrapper {
+  margin: 2rem;
+}
+</style>
