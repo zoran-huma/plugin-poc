@@ -1,6 +1,6 @@
 import * as Vue from 'vue/dist/vue.esm-bundler';
 
-export default async function externalComponent(url) {
+export default async function externalComponent(url, cssLink) {
   const name = url
     .split('/')
     .reverse()[0]
@@ -20,6 +20,12 @@ export default async function externalComponent(url) {
     });
     script.src = url;
     document.head.appendChild(script);
+
+    const link = document.createElement('link');
+    link.type = 'text/css';
+    link.rel = 'stylesheet';
+    link.href = cssLink;
+    document.head.appendChild(link);
   });
 
   return window[name];

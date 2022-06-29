@@ -1,51 +1,88 @@
 <template>
-  <div><h1>Host app</h1></div>
   <div>
+    <h1>Host app</h1>
+  </div>
+  <div>
+    <div>
+      <h1>List of all plugins</h1>
+      <div v-for="plugin in pluginListFromServer" :key="plugin.key">
+        {{ plugin.name }}
+        <input
+          type="checkbox"
+          :checked="plugin.enabled"
+          :id="plugin.id"
+          class="mr-2 hidden"
+          @input="(event) => setChecked(event)"
+        />
+      </div>
+    </div>
+
+    <div>
+      <h1>List of all ENABLED plugins</h1>
+      <div v-for="plugin in pluginListFromServer" :key="plugin.key">
+        {{ plugin.name }} {{ isEnabled(plugin) }}
+      </div>
+    </div>
+
     <h1>Display Plugins below:</h1>
-    <component :is="plugins[pluginToShow]" />
-    <button @click="togglePlugin">Toggle Plugin</button>
+
+    <div class="plugin-wrapper">
+      <component
+        v-for="plugin in enabledPluginListFromServer"
+        :key="plugin.id"
+        :is="plugins[pluginToShow]"
+      />
+    </div>
   </div>
 </template>
 
 <script>
-import { computed, defineAsyncComponent, ref } from 'vue';
+import { computed, defineAsyncComponent, onMounted, ref } from 'vue';
 import externalComponent from './utils/external-component';
+import { useStore } from 'vuex';
 
 export default {
   setup() {
-    // Mock plugin list from server
-    const pluginList = [
-      {
-        key: 'plugin1',
-        name: 'Plugin 1',
-        hash: '9a885c361fb6ff6f',
-      },
-      {
-        key: 'plugin2',
-        name: 'Plugin 2',
-        hash: '9ed5fbd6c7e09a40',
-      },
-    ];
-    // Fetch the plugin build file from server
+    const store = useStore();
+    const pluginListFromServer = computed(() => {
+      return store.getters.pluginsGetter;
+    });
+    const enabledPluginListFromServer = computed(() => {
+      return store.getters.enabledPluginsGetter;
+    });
     const plugins = computed(() =>
-      pluginList.map((plugin) => {
+      pluginListFromServer.value.map((plugin) => {
         return defineAsyncComponent(() =>
           externalComponent(
-            `http://localhost:8200/${plugin.key}.${plugin.hash}.umd.min.js`
+            `http://localhost:8200/${plugin.key}.${plugin.hash}.umd.min.js`,
+            `http://localhost:8200/${plugin.key}.${plugin.hash}.css`
           )
         );
       })
     );
     const pluginToShow = ref(0);
-    const togglePlugin = () => {
-      pluginToShow.value = pluginToShow.value == 1 ? 0 : 1;
+    const setChecked = (event) => {
+      store.dispatch('togglePlugin', event.target.id);
+    };
+    const isEnabled = (plugin) => {
+      return plugin.enabled ? 'ENABLED' : 'DISABLED';
     };
 
+    // Lifecycle
+    onMounted(() => {
+      store.dispatch('getPlugins');
+    });
+
     return {
-      pluginList,
+      enabledPluginListFromServer,
+      pluginListFromServer,
       plugins,
       pluginToShow,
-      togglePlugin,
+      // Methods
+      setChecked,
+      isEnabled,
+      // Store actions
+      togglePlugin: (id) => store.dispatch('togglePlugin', id),
     };
   },
 };
