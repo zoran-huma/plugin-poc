@@ -25,6 +25,9 @@
 
       <h1>Display enabled plugins:</h1>
 
+      <div>NPM Package</div>
+      <poc-button>[HOST] From NPM Package</poc-button>
+
       <div
         class="plugin-wrapper"
         v-for="plugin in enabledPluginListFromServer"

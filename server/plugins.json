@@ -1,1 +1,1 @@
-[{"id":0,"key":"plugin-01","name":"Plugin 1","hash":"e1687d4554b8ce03","enabled":true},{"id":1,"key":"plugin-02","name":"Plugin 2","hash":"376971305ade02ce","enabled":true}]
+[{"id":0,"key":"plugin-01","name":"Plugin 1","hash":"e1687d4554b8ce03","enabled":true},{"id":1,"key":"plugin-02","name":"Plugin 2","hash":"376971305ade02ce","enabled":true},{"id":2,"key":"plugin-03","name":"Plugin 3","hash":"9155ac5cbe9ee296","enabled":true},{"id":3,"key":"plugin","name":"Plugin 4","hash":"93ae3c4d26bf75d96dbe","enabled":false}]

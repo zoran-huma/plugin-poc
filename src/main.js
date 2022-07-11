@@ -4,6 +4,9 @@ import axios from 'axios';
 
 import App from './App.vue';
 
+import PocButton from 'poc-button';
+import 'poc-button/dist/style.css';
+
 const store = createStore({
   state() {
     return {
@@ -50,4 +53,4 @@ const store = createStore({
   },
 });
 
-createApp(App).use(store).mount('#app');
+createApp(App).use(store).use(PocButton).mount('#app');
